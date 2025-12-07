@@ -1,0 +1,66 @@
+[
+  {
+    "id": "1",
+    "name": "Beef Brisket",
+    "description": "Premium quality beef brisket, perfect for slow cooking and smoking.",
+    "image": "/images/products/beef-brisket.jpg",
+    "type": "FROZEN",
+    "category": "Beef"
+  },
+  {
+    "id": "2",
+    "name": "Goat Shoulder",
+    "description": "Tender goat shoulder, ideal for stews and curries.",
+    "image": "/images/products/goat-shoulder.jpg",
+    "type": "CHILLED",
+    "category": "Goat"
+  },
+  {
+    "id": "3",
+    "name": "Lamb Leg",
+    "description": "Succulent and flavorful lamb leg, great for roasting.",
+    "image": "/images/products/lamb-leg.jpg",
+    "type": "FROZEN",
+    "category": "Lamb"
+  },
+  {
+    "id": "4",
+    "name": "Mutton Ribs",
+    "description": "Delicious mutton ribs, excellent for grilling or braising.",
+    "image": "/images/products/mutton-ribs.jpg",
+    "type": "CHILLED",
+    "category": "Lamb"
+  },
+  {
+    "id": "5",
+    "name": "Whole Chicken",
+    "description": "Farm-fresh whole chicken, halal certified.",
+    "image": "/images/products/beef-brisket.jpg",
+    "type": "FROZEN",
+    "category": "Poultry"
+  },
+  {
+    "id": "6",
+    "name": "Camel Hump Meat",
+    "description": "Lean and tender camel hump meat, a delicacy.",
+    "image": "/images/products/beef-brisket.jpg",
+    "type": "CHILLED",
+    "category": "Camel"
+  },
+  {
+    "id": "7",
+    "name": "Beef Liver",
+    "description": "Fresh beef liver, rich in iron and nutrients.",
+    "image": "/images/products/beef-brisket.jpg",
+    "type": "CHILLED",
+    "category": "Offal"
+  },
+  {
+    "id": "8",
+    "name": "Goat Ribs",
+    "description": "Flavorful goat ribs, perfect for BBQ.",
+    "image": "/images/products/goat-shoulder.jpg",
+    "type": "FROZEN",
+    "category": "Goat"
+  }
+]
