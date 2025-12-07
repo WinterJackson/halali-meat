@@ -8,22 +8,22 @@ import { handleServerActionError } from '@/lib/error-handler';
 import { logger } from '@/lib/logger';
 import { rateLimiter } from '@/lib/rate-limiter';
 import {
-    changePasswordSchema,
-    companySettingsSchema,
-    emailSettingsSchema,
-    integrationSettingsSchema,
-    notificationPreferencesSchema,
-    preferenceSettingsSchema,
-    profileSettingsSchema,
-    securitySettingsSchema,
-    type ChangePasswordData,
-    type CompanySettingsData,
-    type EmailSettingsData,
-    type IntegrationSettingsData,
-    type NotificationPreferencesData,
-    type PreferenceSettingsData,
-    type ProfileSettingsData,
-    type SecuritySettingsData
+  changePasswordSchema,
+  companySettingsSchema,
+  emailSettingsSchema,
+  integrationSettingsSchema,
+  notificationPreferencesSchema,
+  preferenceSettingsSchema,
+  profileSettingsSchema,
+  securitySettingsSchema,
+  type ChangePasswordData,
+  type CompanySettingsData,
+  type EmailSettingsData,
+  type IntegrationSettingsData,
+  type NotificationPreferencesData,
+  type PreferenceSettingsData,
+  type ProfileSettingsData,
+  type SecuritySettingsData
 } from '@/lib/schemas/settings-schemas';
 import bcrypt from 'bcryptjs';
 import { v2 as cloudinary } from 'cloudinary';
@@ -45,17 +45,41 @@ async function checkAdminAuth() {
  */
 export async function getSettings() {
   try {
-    const userId = await checkAdminAuth();
+    const session = await getServerSession(authOptions);
+    let userId: string;
+
+    if (session && (session.user as any).role === 'ADMIN') {
+      userId = session.user.id as string;
+    } else {
+      // Public access: fetch settings from the first admin found
+      // This assumes a single-tenant or main admin setup
+      const adminPromise = prisma.user.findFirst({
+        where: { role: 'ADMIN' },
+        select: { id: true }
+      });
+      // Add a timeout or optimization if needed, but simple for now
+      const admin = await adminPromise;
+
+      if (!admin) {
+        // Fallback if no admin exists (e.g. fresh install before seed)
+        return { success: true, settings: {} as any };
+      }
+      userId = admin.id;
+    }
 
     let settings = await prisma.settings.findUnique({
       where: { userId },
     });
 
-    // Create default settings if they don't exist
-    if (!settings) {
+    // Create default settings if they don't exist (only for authenticated admin)
+    // For public, we just return empty or defaults if not found
+    if (!settings && session && (session.user as any).role === 'ADMIN') {
       settings = await prisma.settings.create({
         data: { userId },
       });
+    } else if (!settings) {
+      // Public user and no settings found
+      return { success: true, settings: {} as any };
     }
 
     // SECURITY: Never send actual password to client
@@ -77,7 +101,9 @@ export async function getSettings() {
 
     return { success: true, settings: mergedSettings };
   } catch (error) {
-    return handleServerActionError(error, 'Failed to fetch settings');
+    // Only log actual errors, not auth warnings
+    console.error('Failed to fetch settings:', error);
+    return { success: false, message: 'Failed to fetch settings' };
   }
 }
 
@@ -87,7 +113,7 @@ export async function getSettings() {
 export async function updateCompanySettings(data: CompanySettingsData) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const validatedData = companySettingsSchema.parse(data);
 
     await prisma.settings.update({
@@ -106,6 +132,7 @@ export async function updateCompanySettings(data: CompanySettingsData) {
 
     logger.info('Company settings updated', { userId });
     revalidatePath('/admin/settings');
+    revalidatePath('/', 'layout'); // Revalidate root layout to update favicon/logo
     return { success: true, message: 'Company settings updated successfully' };
   } catch (error) {
     return handleServerActionError(error, 'Failed to update company settings');
@@ -118,9 +145,9 @@ export async function updateCompanySettings(data: CompanySettingsData) {
 export async function updateEmailSettings(data: EmailSettingsData) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const validatedData = emailSettingsSchema.parse(data);
-    
+
     const updateData: any = {
       smtpHost: validatedData.smtpHost,
       smtpPort: validatedData.smtpPort,
@@ -154,7 +181,7 @@ export async function updateEmailSettings(data: EmailSettingsData) {
 export async function updateNotificationPreferences(data: NotificationPreferencesData) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const validatedData = notificationPreferencesSchema.parse(data);
 
     await prisma.settings.update({
@@ -181,7 +208,7 @@ export async function updateNotificationPreferences(data: NotificationPreference
 export async function updateSecuritySettings(data: SecuritySettingsData) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const validatedData = securitySettingsSchema.parse(data);
 
     await prisma.settings.update({
@@ -212,12 +239,12 @@ export async function changePassword(data: ChangePasswordData) {
     if (!rateCheck.allowed) {
       logger.warn('Password change rate limit exceeded', { userId });
       const minutesRemaining = Math.ceil((rateCheck.resetAt.getTime() - Date.now()) / 60000);
-      return { 
-        success: false, 
-        message: `Too many attempts. Try again in ${minutesRemaining} minutes.` 
+      return {
+        success: false,
+        message: `Too many attempts. Try again in ${minutesRemaining} minutes.`
       };
     }
-    
+
     const validatedData = changePasswordSchema.parse(data);
 
     const user = await prisma.user.findUnique({
@@ -261,7 +288,7 @@ export async function changePassword(data: ChangePasswordData) {
 export async function updatePreferenceSettings(data: PreferenceSettingsData) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const validatedData = preferenceSettingsSchema.parse(data);
 
     await prisma.settings.upsert({
@@ -359,9 +386,9 @@ export async function testCloudinaryConnection(data?: IntegrationSettingsData) {
     }
 
     // Test the connection using Cloudinary API
-    const isValidFormat = 
-      cloudName.length > 0 && 
-      apiKey.length > 0 && 
+    const isValidFormat =
+      cloudName.length > 0 &&
+      apiKey.length > 0 &&
       apiSecret.length > 0;
 
     if (!isValidFormat) {
@@ -369,12 +396,12 @@ export async function testCloudinaryConnection(data?: IntegrationSettingsData) {
     }
 
     // Configure Cloudinary
-    cloudinary.config({ 
-      cloud_name: cloudName, 
-      api_key: apiKey, 
-      api_secret: apiSecret 
+    cloudinary.config({
+      cloud_name: cloudName,
+      api_key: apiKey,
+      api_secret: apiSecret
     });
-    
+
     // Ping Cloudinary API
     await cloudinary.api.ping();
 
@@ -394,7 +421,7 @@ export async function testCloudinaryConnection(data?: IntegrationSettingsData) {
 export async function updateProfileSettings(data: ProfileSettingsData) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const validatedData = profileSettingsSchema.parse(data);
 
     const user = await prisma.user.findUnique({
@@ -409,10 +436,10 @@ export async function updateProfileSettings(data: ProfileSettingsData) {
     if (validatedData.email !== user.email) {
       // REQUIRE PASSWORD for email change
       if (!validatedData.currentPassword) {
-        return { 
-          success: false, 
+        return {
+          success: false,
           message: 'Current password is required to change email address',
-          requiresPassword: true 
+          requiresPassword: true
         };
       }
 
@@ -453,10 +480,10 @@ export async function updateProfileSettings(data: ProfileSettingsData) {
 
       logger.info('Email verification code sent', { userId, newEmail: validatedData.email });
 
-      return { 
+      return {
         success: false, // Not fully successful yet
         message: 'Verification code sent to new email',
-        requiresVerification: true 
+        requiresVerification: true
       };
     }
 
@@ -484,7 +511,7 @@ export async function updateProfileSettings(data: ProfileSettingsData) {
 export async function verifyEmailChange(code: string, newEmail: string) {
   try {
     const userId = await checkAdminAuth();
-    
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });

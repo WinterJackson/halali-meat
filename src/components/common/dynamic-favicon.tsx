@@ -1,12 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface DynamicFaviconProps {
-  faviconUrl?: string | null;
+  initialUrl?: string | null;
 }
 
-export function DynamicFavicon({ faviconUrl }: DynamicFaviconProps) {
+export function DynamicFavicon({ initialUrl }: DynamicFaviconProps) {
+  const [faviconUrl, setFaviconUrl] = useState<string | null | undefined>(initialUrl);
+
+  useEffect(() => {
+    // Fetch latest settings to match HeaderRenderer logic
+    fetch('/api/settings/public')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.settings?.faviconUrl) {
+          setFaviconUrl(data.settings.faviconUrl);
+        }
+      })
+      .catch(() => {
+        // Silently fail
+      });
+  }, []);
+
   useEffect(() => {
     const favicon = faviconUrl || '/favicon.svg';
     
