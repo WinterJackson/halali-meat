@@ -2,10 +2,11 @@
 
 import { updateQuoteStatus } from '@/app/actions/quote-actions';
 import { QuoteView } from '@/components/quotes/QuoteView';
+import { Input } from '@/components/ui/input';
 import { useURLSync } from '@/lib/url-sync';
 import { cn } from '@/lib/utils';
-import { Archive } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Archive, Search } from 'lucide-react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { QuoteList } from './QuoteList';
 import { Quote } from './types';
@@ -49,7 +50,16 @@ export function ArchivedQuotesClient({ initialQuotes }: { initialQuotes: Quote[]
 
   return (
     <div className="grid lg:grid-cols-2 gap-4 h-full">
-      <div className={cn('h-full', selectedQuote && 'hidden lg:block')}>
+      <div className={cn('h-full flex flex-col gap-4', selectedQuote && 'hidden lg:flex')}>
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search archived quotes..."
+            value={searchQuery}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            className="pl-8"
+          />
+        </div>
         <QuoteList
           quotes={filteredQuotes}
           selectedQuoteId={selectedQuoteId}

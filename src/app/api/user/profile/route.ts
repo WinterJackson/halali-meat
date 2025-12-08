@@ -30,10 +30,12 @@ export async function GET() {
       success: true,
       user: user || null,
     });
-  } catch (_error) {
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
     return NextResponse.json({
       success: false,
       user: null,
+      error: 'Internal Server Error'
     });
   }
 }

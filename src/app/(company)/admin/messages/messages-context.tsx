@@ -70,7 +70,7 @@ export function MessagesProvider({ children, initialMessages, initialStatusFilte
       if (statusFilter === 'DRAFTS') {
         // Drafts are handled separately, not through getSentMessagesAction
         // For now, skip fetching as drafts page handles its own data
-        response = { success: true, messages: [], counts: messageCounts };
+        response = { success: true, messages: [] };
       } else {
         response = await getMessagesAction(pageNum, MESSAGES_PER_PAGE, statusFilter, sortBy, debouncedSearchQuery, dateRange.from, dateRange.to);
       }

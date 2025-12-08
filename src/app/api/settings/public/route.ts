@@ -17,7 +17,8 @@ export async function GET() {
       success: true,
       settings: setting || {},
     });
-  } catch (_error) {
+  } catch (error) {
+    console.error('Error fetching public settings:', error);
     return NextResponse.json({
       success: false,
       settings: {},
