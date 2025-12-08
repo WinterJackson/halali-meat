@@ -2,6 +2,9 @@ import { prisma } from '@/lib/db';
 import { getClientIp, rateLimiter } from '@/lib/rate-limiter';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Force dynamic rendering - this API route uses headers for rate limiting
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/settings/public
  * Public endpoint to fetch logo URLs (no auth required)
