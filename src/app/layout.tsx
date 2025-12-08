@@ -1,4 +1,3 @@
-import { getSettings } from "@/app/actions/settings-actions";
 import AuthProvider from '@/components/auth/auth-provider';
 import { DynamicFavicon } from "@/components/common/dynamic-favicon";
 import CookieConsent from "@/components/cookie-consent";
@@ -17,7 +16,10 @@ const inter = Inter({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const result = await getSettings().catch(() => ({ success: false, settings: null }));
+  // Use public settings fetcher to avoid "Dynamic server usage" error during build
+  // getSettings() calls getServerSession() which uses headers(), breaking static generation
+  const { getPublicSettings } = await import("@/app/actions/settings-actions");
+  const result = await getPublicSettings().catch(() => ({ success: false, settings: null }));
   const settings = result.success ? result.settings : null;
   const favicon = settings?.faviconUrl || '/favicon.svg';
   const companyName = settings?.companyName || "Al-Barka Halali Meats";

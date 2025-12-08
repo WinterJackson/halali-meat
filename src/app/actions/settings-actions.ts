@@ -108,6 +108,54 @@ export async function getSettings() {
 }
 
 /**
+ * Get public settings (branding only) without session dependency.
+ * Safe for use in generateMetadata during static build.
+ */
+export async function getPublicSettings() {
+  try {
+    // Fetch settings from the first admin found
+    const admin = await prisma.user.findFirst({
+      where: { role: 'ADMIN' },
+      select: { id: true }
+    });
+
+    if (!admin) {
+      return { success: true, settings: {} as any };
+    }
+
+    const settings = await prisma.settings.findUnique({
+      where: { userId: admin.id },
+      select: {
+        companyName: true,
+        companyLogoUrl: true,
+        companyLogoDarkUrl: true,
+        faviconUrl: true,
+        cloudinaryCloudName: true,
+        cloudinaryApiKey: true,
+      }
+    });
+
+    if (!settings) {
+      return { success: true, settings: {} as any };
+    }
+
+    // Merge with environment variables for cloudinary
+    const envConfig = getCloudinaryEnvConfig();
+    const mergedSettings = {
+      ...settings,
+      cloudinaryCloudName: settings.cloudinaryCloudName || envConfig.cloudName,
+      cloudinaryApiKey: settings.cloudinaryApiKey || envConfig.apiKey,
+      // No secret returned
+    };
+
+    return { success: true, settings: mergedSettings };
+  } catch (error) {
+    console.error('Failed to fetch public settings:', error);
+    return { success: false, message: 'Failed to fetch settings' };
+  }
+}
+
+/**
  * Update company settings
  */
 export async function updateCompanySettings(data: CompanySettingsData) {
