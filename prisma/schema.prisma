@@ -8,6 +8,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// User model for authentication and role-based access control (RBAC).
+/// Supports local credentials authentication via NextAuth.
 model User {
   id                  String    @id @default(auto()) @map("_id") @db.ObjectId
   name                String
@@ -33,6 +35,8 @@ model User {
   emailVerificationExpires DateTime?
 }
 
+/// Product catalog item.
+/// Supports multiple categories and types (Chilled/Frozen) to categorize meat products.
 model Product {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
@@ -52,6 +56,8 @@ model Product {
   @@index([category, type])
 }
 
+/// Customer quote requests.
+/// Central model for the "Get a Quote" flow, tracking status from UNREAD -> PROCESSED.
 model Quote {
   id              String      @id @default(auto()) @map("_id") @db.ObjectId
   name            String
@@ -81,6 +87,9 @@ model Reply {
   user      User     @relation(fields: [userId], references: [id])
 }
 
+/// Messaging system model.
+/// Handles both Inbound (Contact Form) and Outbound (Admin Replies/Forwards) messages.
+/// Supports threading and attachments.
 model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
@@ -152,6 +161,8 @@ enum ProductType {
   FROZEN
 }
 
+/// Global application settings and preferences (Singleton per user/admin).
+/// Stores company info, email configuration, notification preferences, and UI defaults.
 model Settings {
   id                    String   @id @default(auto()) @map("_id") @db.ObjectId
   userId                String   @unique @db.ObjectId

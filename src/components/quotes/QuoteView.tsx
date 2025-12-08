@@ -5,10 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -26,6 +26,15 @@ interface QuoteViewProps {
   onAction: (action: 'archive' | 'processed' | 'pending' | 'unarchive' | 'trash' | 'read' | 'unread' | 'responded', id: string) => void;
 }
 
+/**
+ * Detailed view of a single Quote Request.
+ * 
+ * Functions:
+ * - Displays customer and product details.
+ * - Shows communication history (replies).
+ * - Provides quick actions (Reply, Change Status).
+ * - Animates into view using Framer Motion.
+ */
 export function QuoteView({ quote, onBackClick, onAction }: QuoteViewProps) {
   const [isReplyDialogOpen, setIsReplyDialogOpen] = useState(false);
   const [confirmArchive, setConfirmArchive] = useState(false);

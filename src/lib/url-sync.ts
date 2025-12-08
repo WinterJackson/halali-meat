@@ -101,8 +101,16 @@ export function useURLSync() {
         });
 
         // Build new URL
+        newParams.sort();
         const queryString = newParams.toString();
         const newURL = queryString ? `${pathname}?${queryString}` : pathname;
+
+        // Compare with current parameters to avoid redundant pushes
+        const currentParams = new URLSearchParams(searchParams);
+        currentParams.sort();
+        if (newParams.toString() === currentParams.toString()) {
+            return;
+        }
 
         // Push to router with shallow routing (no page reload)
         router.push(newURL, { scroll: false });

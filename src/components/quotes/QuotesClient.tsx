@@ -18,6 +18,14 @@ import { exportQuotesToCSV } from '@/lib/export-utils';
 import { toast } from 'sonner';
 import { QuoteListSkeleton } from './QuoteListSkeleton';
 
+/**
+ * Admin Quote Management Interface.
+ * 
+ * Architecture:
+ * - Uses `useQuotes` context for global state (fetching, filtering, counts).
+ * - Implements a split-pane layout (List + Detail view).
+ * - Handles bulk operations (Select All, Mark Processed, Export CSV).
+ */
 export function QuotesClient() {
   const { 
     quotes, 
@@ -60,6 +68,10 @@ export function QuotesClient() {
     setIsAllSelected(prev => !prev);
   }, [isAllSelected, quotes]);
 
+  /**
+   * Execute action on multiple selected quotes.
+   * Leverages the context's bulk handler and clears selection on success.
+   */
   const handleBulkAction = useCallback(async (action: 'archive' | 'processed' | 'pending' | 'responded' | 'trash' | 'read' | 'unread') => {
     if (selectedQuoteIds.length === 0) {
       toast.info('No quotes selected.');

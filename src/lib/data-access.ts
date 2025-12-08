@@ -26,6 +26,19 @@ export async function getUserSettings(userId: string) {
 
   return settings;
 }
+/**
+ * Fetch products with pagination, filtering, and sorting.
+ * 
+ * @param page - Current page number (default: 1)
+ * @param limit - Number of items per page (default: 12). Set to 0 to fetch all.
+ * @param search - Search term for product name or description
+ * @param sortBy - Sorting criteria in "field_order" format (e.g., "price_asc")
+ * @param dateFrom - Filter by creation date (start)
+ * @param dateTo - Filter by creation date (end)
+ * @param category - Filter by product category (partial match, case-insensitive)
+ * @param type - Filter by product type (exact match: CHILLED or FROZEN)
+ * @returns Object containing list of products and total count
+ */
 export async function getProducts(
   page = 1,
   limit = 12,
@@ -136,6 +149,18 @@ export async function getProducts(
   }
 }
 
+/**
+ * Fetch quotes with pagination and advanced filtering.
+ * 
+ * @param page - Current page number
+ * @param limit - Items per page
+ * @param status - Filter by QuoteStatus enum (or 'ALL')
+ * @param sortBy - Sort criteria
+ * @param search - Search across name, email, company, etc.
+ * @param dateFrom - Start date filter
+ * @param dateTo - End date filter
+ * @returns Object containing quotes and total count
+ */
 export async function getQuotes(page = 1, limit = 10, status?: string, sortBy?: string, search?: string, dateFrom?: Date, dateTo?: Date) {
   try {
     // Validate date range
@@ -220,6 +245,19 @@ export async function getQuotes(page = 1, limit = 10, status?: string, sortBy?: 
   }
 }
 
+/**
+ * Fetch inbound contact messages.
+ * Excludes archived/trash messages unless specifically requested via status='ALL'.
+ * 
+ * @param page - Current page number
+ * @param limit - Items per page
+ * @param status - Filter by message status
+ * @param sortBy - Sort order
+ * @param search - Search query
+ * @param dateFrom - Start date
+ * @param dateTo - End date
+ * @returns List of messages and total count matching the criteria
+ */
 export async function getContactMessages(page = 1, limit = 10, status?: string, sortBy?: string, search?: string, dateFrom?: Date, dateTo?: Date) {
   try {
     // Validate date range
@@ -313,6 +351,19 @@ export async function getContactMessages(page = 1, limit = 10, status?: string, 
   }
 }
 
+/**
+ * Fetch sent (outbound) messages for a specific user.
+ * 
+ * @param userId - The ID of the user (sender)
+ * @param page - Current page
+ * @param limit - Items per page
+ * @param sortBy - Sort order
+ * @param search - Search query
+ * @param status - Filter by status
+ * @param dateFrom - Start date
+ * @param dateTo - End date
+ * @returns List of sent messages and total count
+ */
 export async function getSentMessages(userId: string, page = 1, limit = 10, sortBy?: string, search?: string, status?: string, dateFrom?: Date, dateTo?: Date) {
   try {
     // Enforce max limit to prevent abuse

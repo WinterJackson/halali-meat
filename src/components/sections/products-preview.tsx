@@ -1,51 +1,25 @@
+import { Product } from '@/components/products/types';
+import { getProducts } from '@/lib/data-access';
+import ProductsPreviewClient from './products-preview-client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { products } from '@/data/products';
-import Image from 'next/image';
-import Link from 'next/link';
-import { memo } from 'react';
+export default async function ProductsPreview() {
+  const { products } = await getProducts(1, 4);
+  
+  // Transform Prisma result to match Client Component props (handling Date objects)
+  const formattedProducts: Product[] = products.map(p => ({
+    ...p,
+    // Ensure dates are converted to strings or kept as Dates acceptable by client? 
+    // Next.js passes props from Server to Client as serialized JSON. Dates become strings if not carefully handled.
+    // However, the interface allows Date | string.
+    // But getProducts returns plain objects from Prisma. 
+    // Prisma returns Date objects. Next.js warns passing Date objects to Client Components directly in some versions, 
+    // but usually it works or needs toJSON.
+    // Let's rely on standard passing for now, or convert if needed.
+    // Wait, getProducts returns `imageUrl` (string). 
+    // The type match is critical.
+    price: p.price,
+    type: p.type as any, // Cast to match enum
+  }));
 
-const ProductsPreview = memo(function ProductsPreview() {
-  const previewProducts = products.slice(0, 4);
-
-  return (
-    <section className="py-16 sm:py-24">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold">Our Products</h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">A glimpse of our premium, halal-certified meat selections, sourced with care and delivered with trust.</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {previewProducts.map((product) => (
-            <div key={product.id} className="bg-card border border-border/50 rounded-lg overflow-hidden shadow-sm hover:shadow-md hover:border-border transition-all duration-300 flex flex-col group">
-              <div className="relative h-60 w-full overflow-hidden">
-                <Image 
-                src={product.image || '/images/placeholder.jpg'} 
-                alt={product.name} 
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-                <Badge variant="secondary" className="absolute top-3 right-3">{product.type}</Badge>
-              </div>
-              <div className="p-5 flex flex-col flex-grow">
-                <h3 className="text-lg font-bold mb-2">{product.name}</h3>
-                <p className="text-muted-foreground text-sm mb-4 flex-grow">{product.description}</p>
-                <Button asChild variant="outline" className="w-full mt-auto">
-                  <Link href={`/products`}>View Details</Link>
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="text-center mt-12">
-          <Button asChild size="lg">
-            <Link href="/products">Explore All Products</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-});
-
-export default ProductsPreview;
+  return <ProductsPreviewClient products={formattedProducts} />;
+}

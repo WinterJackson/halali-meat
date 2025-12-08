@@ -27,6 +27,13 @@ interface CategoryManagerProps {
   onCategoriesUpdated?: () => void;
 }
 
+/**
+ * Modal for managing Product Categories.
+ * Allows Admins to:
+ * - View all categories with product counts.
+ * - Rename categories (updates all linked products).
+ * - Delete empty categories (protected if products exist).
+ */
 export function CategoryManager({ isOpen, onClose, onCategoriesUpdated }: CategoryManagerProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);

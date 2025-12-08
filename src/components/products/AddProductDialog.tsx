@@ -42,6 +42,15 @@ interface AddProductDialogProps {
   productToEdit: Product | null;
 }
 
+/**
+ * Modal form for Creating and Editing Products.
+ * 
+ * Features:
+ * - Zod Validation for all fields.
+ * - Image Upload Handling: Uploads to Cloudinary immediately on file selection.
+ * - Orphaned Image Cleanup: Deletes uploaded images if the user cancels creation.
+ * - Dynamic Category Management: allows adding new categories on the fly.
+ */
 export function AddProductDialog({ isOpen, onClose, onSave, productToEdit }: AddProductDialogProps) {
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -92,6 +101,10 @@ export function AddProductDialog({ isOpen, onClose, onSave, productToEdit }: Add
     }
   }, [productToEdit, reset]);
 
+  /**
+   * Handles immediate file upload when a user selects an image.
+   * Uploads to Cloudinary via API route and sets the returned URL to form state.
+   */
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -121,6 +134,10 @@ export function AddProductDialog({ isOpen, onClose, onSave, productToEdit }: Add
   };
 
   // Cleanup orphaned image when dialog is closed without saving
+  /**
+   * Special handler: If a user uploads an image but then cancels the "Add Product" flow,
+   * we must delete that image from Cloudinary to avoid storage waste.
+   */
   const handleClose = async () => {
     // Only delete if it's a NEW product (not editing) and an image was uploaded
     if (!productToEdit && uploadedImageUrl) {

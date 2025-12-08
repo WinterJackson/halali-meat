@@ -133,6 +133,15 @@ const Step3_Review = () => {
 
 // --- MAIN MULTI-STEP FORM COMPONENT ---
 
+/**
+ * Multi-step form for requesting a custom quote.
+ * 
+ * Features:
+ * - 3 Steps: Contact Info -> Quote Details -> Review
+ * - Persists state between steps using React Hook Form context.
+ * - Uses Framer Motion for smooth transition animations between steps.
+ * - Pre-fills product selection if URL parameter `product` is present.
+ */
 export const MultiStepQuoteForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   

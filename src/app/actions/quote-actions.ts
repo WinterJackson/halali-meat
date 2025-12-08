@@ -10,52 +10,57 @@ import { QuoteStatus } from '@prisma/client';
 import { getServerSession } from "next-auth";
 import { revalidatePath } from 'next/cache';
 
+/**
+ * Verify that the current user is an authenticated ADMIN.
+ * Throws an error if not authorized.
+ * @returns userId of the admin
+ */
 async function checkAdminAuth() {
-  const session = await getServerSession(authOptions);
-  if (!session || (session.user as any).role !== "ADMIN") {
-    throw new Error("Forbidden: You do not have administrative privileges.");
-  }
-  return session.user.id;
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== "ADMIN") {
+        throw new Error("Forbidden: You do not have administrative privileges.");
+    }
+    return session.user.id;
 }
 
 export async function getQuoteBadgeCounts(): Promise<{ success: boolean; counts?: QuoteCounts; error?: string }> {
-  try {
-    const [
-      total,
-      unread,
-      read,
-      pending,
-      processed,
-      responded,
-      archived,
-      trash
-    ] = await Promise.all([
-      prisma.quote.count({ where: { status: { notIn: [QuoteStatus.ARCHIVED, QuoteStatus.TRASH] } } }),
-      prisma.quote.count({ where: { status: QuoteStatus.UNREAD } }),
-      prisma.quote.count({ where: { status: QuoteStatus.READ } }),
-      prisma.quote.count({ where: { status: QuoteStatus.PENDING } }),
-      prisma.quote.count({ where: { status: QuoteStatus.PROCESSED } }),
-      prisma.quote.count({ where: { status: QuoteStatus.RESPONDED } }),
-      prisma.quote.count({ where: { status: QuoteStatus.ARCHIVED } }),
-      prisma.quote.count({ where: { status: QuoteStatus.TRASH } }),
-    ]);
+    try {
+        const [
+            total,
+            unread,
+            read,
+            pending,
+            processed,
+            responded,
+            archived,
+            trash
+        ] = await Promise.all([
+            prisma.quote.count({ where: { status: { notIn: [QuoteStatus.ARCHIVED, QuoteStatus.TRASH] } } }),
+            prisma.quote.count({ where: { status: QuoteStatus.UNREAD } }),
+            prisma.quote.count({ where: { status: QuoteStatus.READ } }),
+            prisma.quote.count({ where: { status: QuoteStatus.PENDING } }),
+            prisma.quote.count({ where: { status: QuoteStatus.PROCESSED } }),
+            prisma.quote.count({ where: { status: QuoteStatus.RESPONDED } }),
+            prisma.quote.count({ where: { status: QuoteStatus.ARCHIVED } }),
+            prisma.quote.count({ where: { status: QuoteStatus.TRASH } }),
+        ]);
 
-    return {
-      success: true,
-      counts: {
-        total,
-        unread,
-        read,
-        pending,
-        processed,
-        responded,
-        archived,
-        trash,
-      },
-    };
-  } catch (error) {
-    return handleServerActionError(error, 'Failed to fetch quote badge counts');
-  }
+        return {
+            success: true,
+            counts: {
+                total,
+                unread,
+                read,
+                pending,
+                processed,
+                responded,
+                archived,
+                trash,
+            },
+        };
+    } catch (error) {
+        return handleServerActionError(error, 'Failed to fetch quote badge counts');
+    }
 }
 
 export async function getQuotesAction(page = 1, limit = 10, status?: string, sortBy?: string, search?: string, dateFrom?: Date, dateTo?: Date): Promise<ActionResponse> {
@@ -64,7 +69,7 @@ export async function getQuotesAction(page = 1, limit = 10, status?: string, sor
         const { quotes, totalCount } = await getQuotes(page, limit, status, sortBy, search, dateFrom, dateTo);
         const countsResult = await getQuoteBadgeCounts();
         if (!countsResult.success) {
-          return { success: false, quotes: [], totalCount: 0, message: countsResult.error };
+            return { success: false, quotes: [], totalCount: 0, message: countsResult.error };
         }
         return { success: true, quotes: quotes as any, totalCount, counts: countsResult.counts };
     } catch (error) {
@@ -115,6 +120,16 @@ export async function updateMultipleQuoteStatus(ids: string[], status: QuoteStat
     }
 }
 
+/**
+ * Reply to a quote request via email and record the reply in DB.
+ * 
+ * Logic:
+ * 1. Authenticate Admin
+ * 2. Send email to customer
+ * 3. Create 'Reply' record in DB
+ * 4. Update Quote status to 'RESPONDED'
+ * All wrapped in a transaction for data integrity.
+ */
 export async function replyToQuote(quoteId: string, recipientEmail: string, content: string) {
     try {
         const userId = await checkAdminAuth();

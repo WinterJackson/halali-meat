@@ -34,7 +34,7 @@ const HalalStandardsPage = () => {
 
       <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
         <div className="relative h-80 md:h-[500px] w-full rounded-lg overflow-hidden shadow-lg">
-          <Image src="/images/halal-certification.jpg" alt="Halal certification document" fill className="object-cover" />
+          <Image src="/images/halal-certification.jpg" alt="Halal certification document" fill className="object-cover" unoptimized />
         </div>
         <div className="space-y-6">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">The Halal Process</h2>

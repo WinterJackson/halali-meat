@@ -16,6 +16,7 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        // 1. Rate Limiting: Prevent brute force attacks by limiting requests by IP
         const ip = req.headers?.['x-forwarded-for'] || req.headers?.['x-real-ip'];
         if (ip) {
           const { success } = await ratelimit.limit(ip);
@@ -58,12 +59,15 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, trigger }) {
+      // PERSIST USER DATA TO TOKEN
+      // The `user` object is only available on the first sign-in.
+      // We persist the ID, role, and image to the JWT token for subsequent requests.
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.image = user.image;
       }
-      
+
       // When session is updated (e.g., after profile change), fetch fresh user data
       if (trigger === "update" && token.id) {
         const freshUser = await prisma.user.findUnique({
@@ -76,7 +80,7 @@ export const authOptions: AuthOptions = {
             role: true,
           },
         });
-        
+
         if (freshUser) {
           token.name = freshUser.name;
           token.email = freshUser.email;
@@ -84,10 +88,12 @@ export const authOptions: AuthOptions = {
           token.role = freshUser.role;
         }
       }
-      
+
       return token;
     },
     async session({ session, token }) {
+      // MAP TOKEN DATA TO SESSION
+      // Makes user ID, role, and image available to the client via useSession()
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;

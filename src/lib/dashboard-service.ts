@@ -6,6 +6,14 @@ import { formatDistanceToNow } from 'date-fns';
  * Efficiently gets dashboard statistics using database aggregations
  * instead of fetching all records and filtering in memory
  */
+/**
+ * Efficiently gets dashboard statistics using database aggregations.
+ * 
+ * Performance:
+ * - Uses `Promise.all` to run 9 distinct count queries in parallel.
+ * - DB: MongoDB aggregations are faster than fetching + filtering arrays.
+ * - Timeframe: Calculates "This Month" metrics using a 30-day window.
+ */
 export async function getDashboardMetrics() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -34,9 +42,9 @@ export async function getDashboardMetrics() {
         where: { status: { notIn: ['ARCHIVED', 'TRASH'] } },
       }),
       prisma.quote.count({
-        where: { 
+        where: {
           status: { notIn: ['ARCHIVED', 'TRASH'] },
-          createdAt: { gte: thirtyDaysAgo } 
+          createdAt: { gte: thirtyDaysAgo }
         },
       }),
       prisma.quote.count({
@@ -48,7 +56,7 @@ export async function getDashboardMetrics() {
 
       // Messages metrics
       prisma.message.count({
-        where: { 
+        where: {
           type: 'INBOUND',
           status: { notIn: ['ARCHIVED', 'TRASH'] }
         },
@@ -99,6 +107,10 @@ export async function getDashboardMetrics() {
 /**
  * Fetches recent quotes for dashboard display
  */
+/**
+ * Fetches the 3 most recent quotes for the dashboard widget.
+ * Includes "Time Ago" formatting (e.g., "2 hours ago").
+ */
 export async function getRecentQuotes() {
   try {
     const quotes = await prisma.quote.findMany({
@@ -131,11 +143,14 @@ export async function getRecentQuotes() {
 /**
  * Fetches recent messages for dashboard display
  */
+/**
+ * Fetches the 2 most recent inbound messages for the dashboard widget.
+ */
 export async function getRecentMessages() {
   try {
     const messages = await prisma.message.findMany({
       take: 2,
-      where: { 
+      where: {
         type: 'INBOUND',
         status: { notIn: ['ARCHIVED', 'TRASH'] }
       },
@@ -165,12 +180,23 @@ export async function getRecentMessages() {
  * Fetches aggregated quote data for chart display
  * Groups quotes by month and product
  */
+/**
+ * Aggregates quote data for the main analytics chart.
+ * 
+ * Logic:
+ * 1. Fetches quotes within the selected time range (Daily/Weekly/Monthly).
+ * 2. Maps product interest strings to Product IDs (fuzzy matching).
+ * 3. Groups data by date key.
+ * 4. Sums up counts and quantities per product per period.
+ * 
+ * @param timeRange - 'daily' (30d), 'weekly' (12w), or 'monthly' (All time)
+ */
 export async function getQuotesChartData(timeRange: 'daily' | 'weekly' | 'monthly' = 'monthly') {
   try {
     // Determine date range based on time range selection
     const now = new Date();
     let startDate: Date;
-    
+
     if (timeRange === 'daily') {
       startDate = new Date(now);
       startDate.setDate(startDate.getDate() - 30); // Last 30 days
@@ -205,18 +231,18 @@ export async function getQuotesChartData(timeRange: 'daily' | 'weekly' | 'monthl
 
     // Create a map of product names to IDs for matching (case-insensitive)
     const productNameToId = new Map(products.map((p) => [p.name.toLowerCase(), p.id]));
-    
+
     // Track unmatched products for debugging
     const unmatchedProducts = new Set<string>();
-    
+
     // Aggregate by time period and product
     const aggregatedData = new Map<string, any>();
-    
+
     quotes.forEach((quote) => {
       const date = new Date(quote.createdAt);
       let key: string;
       let displayName: string;
-      
+
       if (timeRange === 'daily') {
         key = date.toISOString().split('T')[0]; // YYYY-MM-DD
         displayName = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -228,7 +254,7 @@ export async function getQuotesChartData(timeRange: 'daily' | 'weekly' | 'monthl
         weekStart.setDate(diff);
         weekStart.setHours(0, 0, 0, 0);
         key = weekStart.toISOString().split('T')[0];
-        
+
         // Get week number
         const startOfYear = new Date(date.getFullYear(), 0, 1);
         const daysSinceStart = Math.floor((date.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24));
@@ -238,10 +264,10 @@ export async function getQuotesChartData(timeRange: 'daily' | 'weekly' | 'monthl
         key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         displayName = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
       }
-      
+
       const productName = quote.productInterest || 'Other';
       let productId = productNameToId.get(productName.toLowerCase());
-      
+
       // If no exact match found, try fuzzy matching by category keywords
       if (!productId) {
         const lowerName = productName.toLowerCase();
@@ -266,17 +292,17 @@ export async function getQuotesChartData(timeRange: 'daily' | 'weekly' | 'monthl
           productId = 'other';
         }
       }
-      
+
       if (!aggregatedData.has(key)) {
         aggregatedData.set(key, { name: displayName, sortKey: key });
       }
-      
+
       const periodData = aggregatedData.get(key);
       const countKey = `${productId}QuotesCount`;
       const quantityKey = `${productId}TotalQuantity`;
-      
+
       periodData[countKey] = (periodData[countKey] || 0) + 1;
-      
+
       // Parse quantity if it exists
       const quantityMatch = quote.quantity?.match(/(\d+)/);
       const quantity = quantityMatch ? parseInt(quantityMatch[1], 10) : 0;
@@ -285,8 +311,8 @@ export async function getQuotesChartData(timeRange: 'daily' | 'weekly' | 'monthl
 
     // Log unmatched products for debugging
     if (unmatchedProducts.size > 0) {
-      logger.debug('[QuotesChart] Unmatched products mapped to Other', { 
-        unmatchedProducts: Array.from(unmatchedProducts) 
+      logger.debug('[QuotesChart] Unmatched products mapped to Other', {
+        unmatchedProducts: Array.from(unmatchedProducts)
       });
     }
 

@@ -8,13 +8,23 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+/**
+ * POST /api/upload
+ * 
+ * Handles file uploads to Cloudinary storage.
+ * 
+ * Security:
+ * - Route is protected by NextAuth middleware (see `middleware.ts`).
+ * - Only authenticated users (admins) can access this endpoint.
+ * - Validates file presence and size limit (10MB).
+ */
 export async function POST(request: NextRequest) {
   try {
     // SECURITY NOTE: Auth is handled by:
     // 1. Middleware protecting /api/upload/* routes
     // 2. Server actions (uploadCompanyLogo, etc.) calling checkAdminAuth()
     // This route is never called directly by clients, only by authenticated server actions
-    
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
 

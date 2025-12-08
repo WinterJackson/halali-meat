@@ -6,6 +6,14 @@ interface DashboardShellProps {
   description?: string;
 }
 
+/**
+ * Layout wrapper for Dashboard pages.
+ * Provides a standardized header with Title/Description and consistent padding/spacing.
+ * 
+ * @param children - The page content
+ * @param title - Main page heading
+ * @param description - Optional page subtitle/context
+ */
 export function DashboardShell({ children, title, description }: DashboardShellProps) {
   return (
     <div className="flex flex-col overflow-x-hidden">

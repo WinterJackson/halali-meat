@@ -19,6 +19,10 @@ cloudinary.config({
 
 import { getContactMessages, getSentMessages } from '@/lib/data-access';
 
+/**
+ * Fetch counts for message badges (Inbox, Unread, Drafts, etc.)
+ * Used for sidebar navigation badges.
+ */
 export async function getMessageBadgeCounts(): Promise<{ success: boolean; counts?: MessageCounts; error?: string }> {
   try {
     const [
@@ -106,6 +110,7 @@ export async function sendComposedMessage(formData: FormData) {
       body: formData.get('body'),
     });
 
+    // 1. Send Email via Nodemailer
     // Admin composed messages are intentional sends, no need for notification check
     await transporter.sendMail({
       ...mailOptions,
@@ -114,6 +119,7 @@ export async function sendComposedMessage(formData: FormData) {
       html: parsedData.body,
     });
 
+    // 2. Persist to Database as OUTBOUND message
     await prisma.message.create({
       data: {
         name: session.user.name || 'Admin',
@@ -269,6 +275,14 @@ export async function deleteMessage(id: string) {
   return updateMessageStatus(id, 'TRASH');
 }
 
+/**
+ * Permanently delete a message and its attachments.
+ * 
+ * CRITICAL: This performs a cascading delete:
+ * 1. Fetches message to get attachment URLs
+ * 2. Deletes files from Cloudinary to free up storage
+ * 3. Deletes the message record from MongoDB (cascading to Attachment records)
+ */
 export async function permanentlyDeleteMessage(id: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id || (session.user as any).role !== 'ADMIN') {

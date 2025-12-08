@@ -18,6 +18,19 @@ import { Message } from './types';
 import { exportMessagesToCSV } from '@/lib/export-utils';
 import { toast } from 'sonner';
 
+/**
+ * Main client component for the Admin Messaging Interface.
+ * 
+ * Responsibilities:
+ * - Orchestrates the two-pane layout (List vs View)
+ * - Manages local UI state for specific interactions (Compose Dialog, Selection)
+ * - Integrates with `MessagesContext` for global data state (messages, loading, counts)
+ * - Handles bulk actions (Archive, Trash, Mark Read) via the Toolbar
+ * 
+ * Layout:
+ * Mobile: Toggles between List and View.
+ * Desktop: Split view (40% List, 60% Content).
+ */
 export function MessagesClient() {
   const { messages, handleSingleAction, handleBulkAction: handleBulkActionFromContext, isLoading, loadMore, hasMore, messageCounts, statusFilter, sortBy, searchQuery, dateRange } = useMessages();
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
