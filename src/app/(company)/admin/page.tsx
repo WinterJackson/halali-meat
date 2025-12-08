@@ -6,6 +6,9 @@ import { RecentMessages } from '@/components/dashboard/RecentMessages';
 import { RecentQuotes } from '@/components/dashboard/RecentQuotes';
 import { getDashboardMetrics, getQuotesChartData, getRecentMessages, getRecentQuotes } from '@/lib/dashboard-service';
 
+// Force dynamic rendering - this page needs database access at runtime
+export const dynamic = 'force-dynamic';
+
 const AdminDashboardPage = async () => {
   // Fetch all data in parallel for maximum performance
   const [stats, recentQuotes, recentMessages, chartData] = await Promise.all([
