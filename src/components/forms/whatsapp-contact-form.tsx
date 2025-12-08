@@ -4,11 +4,14 @@ import { Button } from "@/components/ui/button";
 import { MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
-const WhatsAppContactForm = () => {
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+254123456789';
-  const defaultMessage = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Hello, I would like to inquire about your Al-Barka Halali Meats products.';
+interface WhatsAppContactFormProps {
+  whatsappNumber: string;
+}
+
+const WhatsAppContactForm = ({ whatsappNumber }: WhatsAppContactFormProps) => {
+  const defaultMessage = 'Hello, I would like to inquire about your Al-Barka Halali Meats products.';
   const prefilledMessage = encodeURIComponent(defaultMessage);
-  const whatsappLink = `https://wa.me/${phoneNumber}?text=${prefilledMessage}`;
+  const whatsappLink = `https://wa.me/${whatsappNumber.replace(/[\s+]/g, '')}?text=${prefilledMessage}`;
 
   return (
     <div className="bg-secondary/50 p-6 rounded-lg border border-border/50 w-full flex flex-col items-center justify-center text-center">

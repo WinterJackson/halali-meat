@@ -1,24 +1,40 @@
 'use client';
 
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
-const ContactInfoMap = () => {
+interface ContactInfo {
+  companyEmail: string;
+  companyPhone: string;
+  companyAddress: string;
+}
+
+interface ContactInfoMapProps {
+  contactInfo: ContactInfo;
+}
+
+const ContactInfoMap = ({ contactInfo }: ContactInfoMapProps) => {
   return (
     <div className="w-full flex flex-col lg:flex-row gap-6 md:gap-8">
       <div className="bg-secondary/50 p-6 rounded-lg border border-border/50 lg:w-1/2">
         <h2 className="text-xl font-bold mb-4">Our Information</h2>
         <div className="space-y-4">
-          <a href="mailto:info@halalimeatltd.com" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
+          <a 
+            href={`mailto:${contactInfo.companyEmail}`} 
+            className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+          >
             <Mail className="h-4 w-4 text-primary" />
-            <span className="text-sm">info@halalimeatltd.com</span>
+            <span className="text-sm">{contactInfo.companyEmail}</span>
           </a>
-          <a href="tel:+254123456789" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
+          <a 
+            href={`tel:${contactInfo.companyPhone?.replace(/\s/g, '')}`} 
+            className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+          >
             <Phone className="h-4 w-4 text-primary" />
-            <span className="text-sm">+254 123 456 789</span>
+            <span className="text-sm">{contactInfo.companyPhone}</span>
           </a>
           <div className="flex items-start gap-3 text-muted-foreground">
             <MapPin className="h-4 w-4 text-primary mt-1" />
-            <span className="text-sm">Nairobi, Kenya</span>
+            <span className="text-sm">{contactInfo.companyAddress}</span>
           </div>
         </div>
       </div>

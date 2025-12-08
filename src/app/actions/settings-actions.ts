@@ -122,6 +122,7 @@ export async function updateCompanySettings(data: CompanySettingsData) {
         companyName: validatedData.companyName,
         companyEmail: validatedData.companyEmail,
         companyPhone: validatedData.companyPhone,
+        companyWhatsapp: validatedData.companyWhatsapp,
         companyAddress: validatedData.companyAddress,
         companyWebsite: validatedData.companyWebsite,
         companyLogoUrl: validatedData.companyLogoUrl,

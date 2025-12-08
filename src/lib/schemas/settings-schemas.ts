@@ -24,6 +24,7 @@ export const companySettingsSchema = z.object({
     .optional()
     .or(z.literal('')),
   companyPhone: z.string().optional().or(z.literal('')),
+  companyWhatsapp: z.string().optional().or(z.literal('')),
   companyAddress: z.string().optional().or(z.literal('')),
   companyWebsite: z.string().url('Invalid URL').optional().or(z.literal('')),
   companyLogoUrl: z.string().url('Invalid logo URL').optional().or(z.literal('')),

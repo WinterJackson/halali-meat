@@ -40,13 +40,14 @@ export function AdminSidebar({
   return (
     <aside
       className={cn(
-        "hidden md:flex flex-col border-r border-border/50 transition-all duration-300 ease-in-out md:h-[calc(100vh-80px)] md:sticky md:top-0",
+        "hidden md:flex flex-col border-r border-border/50 transition-all duration-300 ease-in-out md:h-[calc(100vh-80px)] md:sticky md:top-0 md:z-40",
         isCollapsed ? "w-28" : "w-64"
       )}
+      style={{ isolation: 'auto' }}
     >
       {/* Header */}
       <div className={cn("flex items-center justify-between h-16 border-b px-4 shrink-0", isCollapsed && "px-2")}>
-        <h2 className={cn("text-sm font-bold ml-2 text-primary transition-opacity", isCollapsed && "opacity-0 w-0")}>
+        <h2 className={cn("text-sm font-bold ml-2 text-foreground transition-opacity", isCollapsed && "opacity-0 w-0")}>
           Admin Panel
         </h2>
         <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -57,8 +58,16 @@ export function AdminSidebar({
       {/* Navigation - uses flex-1 and min-h-0 for proper scrolling */}
       <nav className="flex-1 min-h-0 p-2 space-y-2">
         {navItems.map((item) => (
-          <li key={item.name} className="list-none">
-            <Link href={item.href} passHref>
+          <li key={item.name} className="list-none relative">
+            <Link 
+              href={item.href} 
+              passHref 
+              className="block relative"
+              {...(isCollapsed ? {
+                'data-tooltip': `${item.name}${item.badge ? ` (${item.badge})` : ''}`,
+                'data-tooltip-position': 'right'
+              } : {})}
+            >
               <Button
                 variant="ghost"
                 className={cn(
@@ -66,8 +75,6 @@ export function AdminSidebar({
                   pathname === item.href && 'bg-muted hover:bg-muted',
                   isCollapsed && 'justify-center'
                 )}
-                data-tooltip={isCollapsed ? `${item.name}${item.badge ? ` (${item.badge})` : ''}` : undefined}
-                data-tooltip-position="right"
               >
                 <item.icon className={cn("h-4 w-4", !isCollapsed && "mr-2")} />
                 <span className={cn(isCollapsed && "hidden")}>{item.name}</span>
@@ -86,8 +93,10 @@ export function AdminSidebar({
               isCollapsed && "justify-center"
             )}
             isCollapsed={isCollapsed} 
-            data-tooltip={isCollapsed ? "Logout" : undefined}
-            data-tooltip-position="right"
+            {...(isCollapsed ? {
+              'data-tooltip': 'Logout',
+              'data-tooltip-position': 'right'
+            } : {})}
           />
         </li>
       </nav>

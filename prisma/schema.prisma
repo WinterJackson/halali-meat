@@ -172,6 +172,7 @@ model Settings {
   companyName           String?
   companyEmail          String?
   companyPhone          String?
+  companyWhatsapp       String?
   companyAddress        String?
   companyLogoUrl        String?
   companyLogoDarkUrl    String?

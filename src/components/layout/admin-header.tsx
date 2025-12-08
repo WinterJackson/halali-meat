@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { useBadgeCounts } from '@/hooks/use-badge-counts';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from "framer-motion";
-import { FileText, Home, Menu, MessageSquare, Package, User as UserIcon, X } from "lucide-react";
+import { FileText, Home, Menu, MessageSquare, Package, Settings, User as UserIcon, X } from "lucide-react";
 import { Session } from "next-auth";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -29,11 +29,12 @@ export function AdminHeader({ session, lightLogoUrl, darkLogoUrl }: AdminHeaderP
     { name: 'Products', href: '/admin/products', icon: Package, badge: null },
     { name: 'Quotes', href: '/admin/quotes', icon: FileText, badge: counts.quotes },
     { name: 'Messages', href: '/admin/messages', icon: MessageSquare, badge: counts.messages },
+    { name: 'Settings', href: '/admin/settings', icon: Settings, badge: null },
   ];
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm shadow-lg">
+      <header className="sticky top-0 w-full border-b bg-background/80 backdrop-blur-sm shadow-lg" style={{ zIndex: 60 }}>
         <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
           <div className="flex items-center">
             <Link href="/admin" className="flex items-center space-x-2">
@@ -77,7 +78,7 @@ export function AdminHeader({ session, lightLogoUrl, darkLogoUrl }: AdminHeaderP
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-sm border-t border-border/50 fixed top-20 w-full z-40"
+            className="md:hidden bg-background/95 backdrop-blur-sm border-t border-border/50 fixed top-20 w-full z-50"
           >
             <nav className="flex flex-col space-y-1 p-4">
               <div className="px-3 py-2">

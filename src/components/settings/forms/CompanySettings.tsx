@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useFormChanges, useUnsavedChanges } from '@/hooks/use-unsaved-changes';
 import { Settings } from '@prisma/client';
-import { Building2, Globe, Loader2, Mail, MapPin, Moon, Phone, Save, Sun, Upload } from 'lucide-react';
+import { Building2, Globe, Loader2, Mail, MapPin, MessageCircle, Moon, Phone, Save, Sun, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
@@ -22,6 +22,7 @@ export function CompanySettings({ settings, onUpdate }: CompanySettingsProps) {
   const [companyName, setCompanyName] = useState(settings?.companyName || '');
   const [companyEmail, setCompanyEmail] = useState(settings?.companyEmail || '');
   const [companyPhone, setCompanyPhone] = useState(settings?.companyPhone || '');
+  const [companyWhatsapp, setCompanyWhatsapp] = useState(settings?.companyWhatsapp || '');
   const [companyAddress, setCompanyAddress] = useState(settings?.companyAddress || '');
   const [companyWebsite, setCompanyWebsite] = useState(settings?.companyWebsite || '');
   const [companyLogoUrl, setCompanyLogoUrl] = useState(settings?.companyLogoUrl || '');
@@ -38,13 +39,14 @@ export function CompanySettings({ settings, onUpdate }: CompanySettingsProps) {
       companyName: settings?.companyName || '',
       companyEmail: settings?.companyEmail || '',
       companyPhone: settings?.companyPhone || '',
+      companyWhatsapp: settings?.companyWhatsapp || '',
       companyAddress: settings?.companyAddress || '',
       companyWebsite: settings?.companyWebsite || '',
       companyLogoUrl: settings?.companyLogoUrl || '',
       companyLogoDarkUrl: settings?.companyLogoDarkUrl || '',
       faviconUrl: settings?.faviconUrl || '',
     },
-    { companyName, companyEmail, companyPhone, companyAddress, companyWebsite, companyLogoUrl, companyLogoDarkUrl, faviconUrl }
+    { companyName, companyEmail, companyPhone, companyWhatsapp, companyAddress, companyWebsite, companyLogoUrl, companyLogoDarkUrl, faviconUrl }
   );
   useUnsavedChanges(hasUnsavedChanges);
 
@@ -99,7 +101,8 @@ export function CompanySettings({ settings, onUpdate }: CompanySettingsProps) {
     const result = await updateCompanySettings({
       companyName, 
       companyEmail, 
-      companyPhone, 
+      companyPhone,
+      companyWhatsapp,
       companyAddress, 
       companyWebsite, 
       companyLogoUrl,
@@ -113,7 +116,7 @@ export function CompanySettings({ settings, onUpdate }: CompanySettingsProps) {
     } else {
       toast.error(result.message);
     }
-  }, [companyName, companyEmail, companyWebsite, companyPhone, companyAddress, companyLogoUrl, companyLogoDarkUrl, faviconUrl, onUpdate]);
+  }, [companyName, companyEmail, companyWebsite, companyPhone, companyWhatsapp, companyAddress, companyLogoUrl, companyLogoDarkUrl, faviconUrl, onUpdate]);
 
   const handleLogoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -479,6 +482,27 @@ export function CompanySettings({ settings, onUpdate }: CompanySettingsProps) {
               </div>
               <p className="text-xs text-muted-foreground">
                 Include country code for international calls (e.g., +254 for Kenya)
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label 
+                htmlFor="companyWhatsapp"
+              >
+                WhatsApp Number
+              </Label>
+              <div className="relative">
+                <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  id="companyWhatsapp" 
+                  value={companyWhatsapp} 
+                  onChange={(e) => setCompanyWhatsapp(e.target.value)}
+                  placeholder="+254712345678"
+                  className="pl-10"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                WhatsApp number with country code (no spaces). Used for "Chat on WhatsApp" buttons.
               </p>
             </div>
             
