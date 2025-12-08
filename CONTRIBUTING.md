@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤝 Contributing to Halali Meat
+# 🤝 Contributing to Al-Barka Halali Meats
 ### Build the Future of B2B Meat Procurement
 
 <p align="center">
@@ -92,5 +92,5 @@ Found a bug? Please create an issue including:
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by the Halali Meat Engineering Team</sub>
+  <sub>Built with ❤️ by the Al-Barka Halali Meats Engineering Team</sub>
 </div>

@@ -261,7 +261,7 @@ export function EmailSettings({ settings, onUpdate }: EmailSettingsProps) {
                   id="smtpFromName" 
                   value={smtpFromName} 
                   onChange={(e) => setSmtpFromName(e.target.value)}
-                  placeholder="Halali Meat"
+                  placeholder="Al-Barka Halali Meats"
                   className="pl-10"
                 />
               </div>

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Sitemap",
-  description: "Sitemap for Halali Meat Ltd - Navigate all pages on our website.",
+  description: "Sitemap for Al-Barka Halali Meats - Navigate all pages on our website.",
 };
 
 export default function SitemapPage() {

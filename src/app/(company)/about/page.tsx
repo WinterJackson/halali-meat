@@ -5,7 +5,7 @@ const AboutPage = () => {
   return (
     <div className="container mx-auto px-4 py-8 sm:py-12 md:py-16">
       <div className="text-center mb-8 md:mb-12">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">About Halali Meat Ltd</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">About Al-Barka Halali Meats</h1>
         <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">Connecting the world to premium, ethically sourced halal meat from the heart of Africa.</p>
       </div>
 
@@ -14,7 +14,7 @@ const AboutPage = () => {
           <div>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Our Story</h2>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Founded on the principles of faith, quality, and reliability, Halali Meat Ltd was born from a desire to share the rich pastoralist heritage of East Africa with the world. We began our journey by partnering with local farmers in Kenya, Tanzania, and Somalia, communities that have perfected the art of raising livestock naturally and sustainably for generations. Our goal is to provide a global market for their premium, grass-fed animals while ensuring strict adherence to halal practices.
+              Founded on the principles of faith, quality, and reliability, Al-Barka Halali Meats was born from a desire to share the rich pastoralist heritage of East Africa with the world. We began our journey by partnering with local farmers in Kenya, Tanzania, and Somalia, communities that have perfected the art of raising livestock naturally and sustainably for generations. Our goal is to provide a global market for their premium, grass-fed animals while ensuring strict adherence to halal practices.
             </p>
           </div>
           <div>

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Disclaimer",
-  description: "Legal disclaimer for Halali Meat Ltd - Important terms and limitations of liability.",
+  description: "Legal disclaimer for Al-Barka Halali Meats - Important terms and limitations of liability.",
 };
 
 export default function DisclaimerPage() {
@@ -19,7 +19,7 @@ export default function DisclaimerPage() {
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-sm sm:text-base">
           <section className="space-y-4">
             <p className="text-muted-foreground leading-relaxed">
-              The information contained on the Halali Meat Ltd website (halalimeatltd.com) is for 
+              The information contained on the Al-Barka Halali Meats website (halalimeatltd.com) is for 
               general information purposes only. While we endeavor to keep the information up to date 
               and correct, we make no representations or warranties of any kind, express or implied, 
               about the completeness, accuracy, reliability, suitability, or availability of the website 
@@ -113,7 +113,7 @@ export default function DisclaimerPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">5. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              In no event shall Halali Meat Ltd, its directors, employees, or agents be liable for any:
+              In no event shall Al-Barka Halali Meats, its directors, employees, or agents be liable for any:
             </p>
             <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
               <li><strong>Direct damages:</strong> Loss of profits, revenue, or business opportunities</li>
@@ -132,7 +132,7 @@ export default function DisclaimerPage() {
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">6. External Links</h2>
             <p className="text-muted-foreground leading-relaxed">
               Our website may contain links to third-party websites or services that are not owned or 
-              controlled by Halali Meat Ltd. We:
+              controlled by Al-Barka Halali Meats. We:
             </p>
             <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
               <li>Have no control over the content, privacy policies, or practices of third-party sites</li>
@@ -191,7 +191,7 @@ export default function DisclaimerPage() {
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">10. Intellectual Property</h2>
             <p className="text-muted-foreground leading-relaxed">
               All content on this website, including text, graphics, logos, images, and software, is 
-              the property of Halali Meat Ltd or its licensors and is protected by copyright, trademark, 
+              the property of Al-Barka Halali Meats or its licensors and is protected by copyright, trademark, 
               and other intellectual property laws. Unauthorized use is prohibited.
             </p>
           </section>
@@ -235,7 +235,7 @@ export default function DisclaimerPage() {
               If you have any questions about this disclaimer, please contact us:
             </p>
             <div className="bg-muted/50 p-4 rounded-lg space-y-2 text-muted-foreground">
-              <p><strong>Halali Meat Ltd</strong></p>
+              <p><strong>Al-Barka Halali Meats</strong></p>
               <p>Email: info@halalimeatltd.com</p>
               <p>Visit our <a href="/contact" className="underline font-medium text-foreground hover:text-primary">Contact Page</a> for more information</p>
             </div>

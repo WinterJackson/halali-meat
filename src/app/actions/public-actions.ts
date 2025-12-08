@@ -61,7 +61,7 @@ export async function submitContactForm(formData: FormData) {
     // Send confirmation email to customer
     await sendEmail({
       to: parsedData.email,
-      subject: 'Message Received - Halali Meat',
+      subject: 'Message Received - Al-Barka Halali Meats',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #2c3e50;">Thank you for contacting us!</h2>
@@ -74,7 +74,7 @@ export async function submitContactForm(formData: FormData) {
           </div>
           
           <p>Best regards,<br>
-          <strong>Halali Meat Team</strong></p>
+          <strong>Al-Barka Halali Meats Team</strong></p>
         </div>
       `,
     });
@@ -144,7 +144,7 @@ export async function submitQuoteForm(formData: FormData) {
     // Send confirmation email to customer
     await sendEmail({
       to: parsedData.email,
-      subject: 'Quote Request Received - Halali Meat',
+      subject: 'Quote Request Received - Al-Barka Halali Meats',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #2c3e50;">Thank you for your quote request!</h2>
@@ -162,7 +162,7 @@ export async function submitQuoteForm(formData: FormData) {
           <p>If you have any questions in the meantime, please don't hesitate to contact us.</p>
           
           <p>Best regards,<br>
-          <strong>Halali Meat Team</strong></p>
+          <strong>Al-Barka Halali Meats Team</strong></p>
           
           <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
           <p style="font-size: 12px; color: #666;">

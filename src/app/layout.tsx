@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const result = await getSettings().catch(() => ({ success: false, settings: null }));
   const settings = result.success ? result.settings : null;
   const favicon = settings?.faviconUrl || '/favicon.svg';
-  const companyName = settings?.companyName || "Halali Meat Ltd.";
+  const companyName = settings?.companyName || "Al-Barka Halali Meats";
 
   return {
     title: {

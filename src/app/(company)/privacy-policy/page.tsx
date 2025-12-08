@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for Halali Meat Ltd - Learn how we collect, use, and protect your personal information.",
+  description: "Privacy Policy for Al-Barka Halali Meats - Learn how we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-sm sm:text-base">
           <section className="space-y-4">
             <p className="text-muted-foreground leading-relaxed">
-              At Halali Meat Ltd ("we", "us", or "our"), we are committed to protecting your privacy 
+              At Al-Barka Halali Meats ("we", "us", or "our"), we are committed to protecting your privacy 
               and personal data. This Privacy Policy explains how we collect, use, disclose, and 
               safeguard your information when you visit our website halalimeatltd.com (the "Site") 
               or use our services.
@@ -211,7 +211,7 @@ export default function PrivacyPolicyPage() {
               data practices, please contact us:
             </p>
             <div className="bg-muted/50 p-4 rounded-lg space-y-2 text-muted-foreground">
-              <p><strong>Halali Meat Ltd</strong></p>
+              <p><strong>Al-Barka Halali Meats</strong></p>
               <p>Email: privacy@halalimeatltd.com</p>
               <p>Or visit our <a href="/contact" className="underline font-medium text-foreground hover:text-primary">Contact Page</a></p>
             </div>

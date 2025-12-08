@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions",
-  description: "Terms and Conditions for Halali Meat Ltd - Legal terms governing the use of our services.",
+  description: "Terms and Conditions for Al-Barka Halali Meats - Legal terms governing the use of our services.",
 };
 
 export default function TermsPage() {
@@ -19,7 +19,7 @@ export default function TermsPage() {
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-sm sm:text-base">
           <section className="space-y-4">
             <p className="text-muted-foreground leading-relaxed">
-              These Terms and Conditions ("Terms") govern your use of the Halali Meat Ltd website 
+              These Terms and Conditions ("Terms") govern your use of the Al-Barka Halali Meats website 
               and services. By accessing our website or placing an order, you agree to be bound by 
               these Terms. Please read them carefully before proceeding.
             </p>
@@ -28,7 +28,7 @@ export default function TermsPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">1. Definitions</h2>
             <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-              <li><strong>"Company," "We," "Us," "Our"</strong> refers to Halali Meat Ltd</li>
+              <li><strong>"Company," "We," "Us," "Our"</strong> refers to Al-Barka Halali Meats</li>
               <li><strong>"Customer," "You," "Your"</strong> refers to the individual or entity purchasing our products</li>
               <li><strong>"Products"</strong> refers to all meat products offered for sale</li>
               <li><strong>"Services"</strong> includes product supply, export services, and related activities</li>
@@ -151,7 +151,7 @@ export default function TermsPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">6. Intellectual Property</h2>
             <p className="text-muted-foreground leading-relaxed">
-              All content on this website (text, images, logos, designs) is owned by Halali Meat Ltd 
+              All content on this website (text, images, logos, designs) is owned by Al-Barka Halali Meats 
               or licensed to us. You may not:
             </p>
             <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
@@ -165,7 +165,7 @@ export default function TermsPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">7. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              To the maximum extent permitted by law, Halali Meat Ltd shall not be liable for:
+              To the maximum extent permitted by law, Al-Barka Halali Meats shall not be liable for:
             </p>
             <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
               <li>Indirect, incidental, or consequential damages</li>
@@ -182,7 +182,7 @@ export default function TermsPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">8. Indemnification</h2>
             <p className="text-muted-foreground leading-relaxed">
-              You agree to indemnify and hold harmless Halali Meat Ltd from any claims, damages, or 
+              You agree to indemnify and hold harmless Al-Barka Halali Meats from any claims, damages, or 
               expenses arising from:
             </p>
             <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
@@ -243,7 +243,7 @@ export default function TermsPage() {
               For questions about these Terms, please contact us:
             </p>
             <div className="bg-muted/50 p-4 rounded-lg space-y-2 text-muted-foreground">
-              <p><strong>Halali Meat Ltd</strong></p>
+              <p><strong>Al-Barka Halali Meats</strong></p>
               <p>Email: legal@halalimeatltd.com</p>
               <p>Visit our <a href="/contact" className="underline font-medium text-foreground hover:text-primary">Contact Page</a></p>
             </div>

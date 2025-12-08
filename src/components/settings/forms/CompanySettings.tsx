@@ -430,7 +430,7 @@ export function CompanySettings({ settings, onUpdate }: CompanySettingsProps) {
                   id="companyName" 
                   value={companyName} 
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="Halali Meat Ltd."
+                  placeholder="Al-Barka Halali Meats"
                   className="pl-10"
                 />
               </div>

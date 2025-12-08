@@ -1,4 +1,4 @@
-export const SITE_TITLE = "Halali Meat Ltd";
+export const SITE_TITLE = "Al-Barka Halali Meats";
 export const SITE_DESCRIPTION = "Premium Halal Meat, Exported with Trust from the heart of Africa.";
 
 export const NAV_LINKS = [

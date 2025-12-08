@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Return & Refund Policy",
-  description: "Return and Refund Policy for Halali Meat Ltd - Quality guarantee and resolution procedures.",
+  description: "Return and Refund Policy for Al-Barka Halali Meats - Quality guarantee and resolution procedures.",
 };
 
 export default function ReturnPolicyPage() {
@@ -19,7 +19,7 @@ export default function ReturnPolicyPage() {
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-sm sm:text-base">
           <section className="space-y-4">
             <p className="text-muted-foreground leading-relaxed">
-              At Halali Meat Ltd, we are committed to delivering premium quality halal meat products. 
+              At Al-Barka Halali Meats, we are committed to delivering premium quality halal meat products. 
               This Return & Refund Policy outlines the conditions and procedures for returns, refunds, 
               and quality claims for our international customers.
             </p>
@@ -271,7 +271,7 @@ export default function ReturnPolicyPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">10. Contact for Claims</h2>
             <div className="bg-muted/50 p-4 rounded-lg space-y-2 text-muted-foreground">
-              <p><strong>Halali Meat Ltd - Quality & Claims Department</strong></p>
+              <p><strong>Al-Barka Halali Meats - Quality & Claims Department</strong></p>
               <p>Email: claims@halalimeatltd.com</p>
               <p>Phone: [Available on request]</p>
               <p>Business Hours: Monday-Friday, 8:00 AM - 5:00 PM EAT</p>

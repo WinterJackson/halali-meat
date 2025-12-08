@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Shipping & Delivery",
-  description: "Shipping and Delivery Policy for Halali Meat Ltd - International export terms and conditions.",
+  description: "Shipping and Delivery Policy for Al-Barka Halali Meats - International export terms and conditions.",
 };
 
 export default function ShippingPage() {
@@ -272,7 +272,7 @@ export default function ShippingPage() {
           <section className="space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">10. Contact for Shipping Inquiries</h2>
             <div className="bg-muted/50 p-4 rounded-lg space-y-2 text-muted-foreground">
-              <p><strong>Halali Meat Ltd - Logistics Department</strong></p>
+              <p><strong>Al-Barka Halali Meats - Logistics Department</strong></p>
               <p>Email: shipping@halalimeatltd.com</p>
               <p>Phone: [Available on request]</p>
               <p>Visit our <a href="/contact" className="underline font-medium text-foreground hover:text-primary">Contact Page</a></p>

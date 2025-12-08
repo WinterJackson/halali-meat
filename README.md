@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🥩 Halali Meat
+# 🥩 Al-Barka Halali Meats
 ### Enterprise B2B Procurement Platform
 
 <p align="center">
@@ -21,7 +21,7 @@
 
 ## 📖 Overview
 
-**Halali Meat** is an enterprise-grade B2B e-commerce platform designed to modernize the meat supply chain. Built on a scalable **Next.js 14** architecture, it replaces traditional procurement methods with a digital-first approach.
+**Al-Barka Halali Meats** is an enterprise-grade B2B e-commerce platform designed to modernize the meat supply chain. Built on a scalable **Next.js 14** architecture, it replaces traditional procurement methods with a digital-first approach.
 
 ### Key Features
 *   **🚀 RFQ Workflow**: Automated "Get a Quote" system for high-volume orders.

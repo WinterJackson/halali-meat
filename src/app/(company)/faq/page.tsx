@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Frequently Asked Questions about Halali Meat Ltd - Product sourcing, halal certification, ordering, and shipping.",
+  description: "Frequently Asked Questions about Al-Barka Halali Meats - Product sourcing, halal certification, ordering, and shipping.",
 };
 
 export default function FAQPage() {

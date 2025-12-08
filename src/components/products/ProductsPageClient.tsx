@@ -115,16 +115,6 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
   const [infiniteScrollEnabled, setInfiniteScrollEnabled] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Sync URL when filter state changes
-  useEffect(() => {
-    updateURL({
-      search: searchQuery,
-      type: selectedType,
-      category: selectedCategory,
-      sort: sortBy,
-    });
-  }, [searchQuery, selectedType, selectedCategory, sortBy, updateURL]);
-
   // Check if product is new (created in last 7 days)
   const isNewProduct = useCallback((product: Product) => {
     if (!product.createdAt) return false;
@@ -215,7 +205,8 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
     setSelectedCategory('ALL');
     setSortBy('newest');
     setVisibleCount(PRODUCTS_PER_PAGE);
-  }, []);
+    updateURL({ search: '', type: 'ALL', category: 'ALL', sort: 'newest' });
+  }, [updateURL]);
 
   // Load more products
   const handleLoadMore = useCallback(() => {
@@ -298,12 +289,18 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
           <Input
             placeholder="Search products by name, description, or category..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              updateURL({ search: e.target.value, type: selectedType, category: selectedCategory, sort: sortBy });
+            }}
             className="pl-10 pr-10 h-12 text-base"
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery('')}
+              onClick={() => {
+                setSearchQuery('');
+                updateURL({ search: '', type: selectedType, category: selectedCategory, sort: sortBy });
+              }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Clear search"
             >
@@ -319,21 +316,30 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
             <Button 
               variant={selectedType === 'ALL' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setSelectedType('ALL')}
+              onClick={() => {
+                setSelectedType('ALL');
+                updateURL({ search: searchQuery, type: 'ALL', category: selectedCategory, sort: sortBy });
+              }}
             >
               All Types
             </Button>
             <Button 
               variant={selectedType === 'FROZEN' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setSelectedType('FROZEN')}
+              onClick={() => {
+                setSelectedType('FROZEN');
+                updateURL({ search: searchQuery, type: 'FROZEN', category: selectedCategory, sort: sortBy });
+              }}
             >
               Frozen
             </Button>
             <Button 
               variant={selectedType === 'CHILLED' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setSelectedType('CHILLED')}
+              onClick={() => {
+                setSelectedType('CHILLED');
+                updateURL({ search: searchQuery, type: 'CHILLED', category: selectedCategory, sort: sortBy });
+              }}
             >
               Chilled
             </Button>
@@ -360,7 +366,10 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
           {/* Sort */}
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={(e) => {
+              setSortBy(e.target.value);
+              updateURL({ search: searchQuery, type: selectedType, category: selectedCategory, sort: e.target.value });
+            }}
             className="h-9 px-3 rounded-md border border-input bg-background text-sm hover:bg-accent cursor-pointer transition-colors"
             aria-label="Sort products"
           >
@@ -411,7 +420,10 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
                   key={cat}
                   variant={selectedCategory === cat ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    updateURL({ search: searchQuery, type: selectedType, category: cat, sort: sortBy });
+                  }}
                   className="rounded-full"
                 >
                   {cat}

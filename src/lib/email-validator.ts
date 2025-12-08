@@ -38,7 +38,7 @@ export async function testSMTPConnection(config: SMTPConfig): Promise<{ success:
     await transporter.sendMail({
       from: `"${config.fromName}" <${config.fromEmail}>`,
       to: config.user, // Send to self
-      subject: 'SMTP Configuration Test - Halali Meat',
+      subject: 'SMTP Configuration Test - Al-Barka Halali Meats',
       text: 'This is a test email to verify your SMTP configuration.\n\nIf you received this email, your SMTP settings are working correctly!',
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px;">
@@ -49,7 +49,7 @@ export async function testSMTPConnection(config: SMTPConfig): Promise<{ success:
           </p>
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
           <p style="color: #666; font-size: 12px;">
-            Sent from Halali Meat Admin Panel<br>
+            Sent from Al-Barka Halali Meats Admin Panel<br>
             Test performed at: ${new Date().toLocaleString()}
           </p>
         </div>
@@ -62,7 +62,7 @@ export async function testSMTPConnection(config: SMTPConfig): Promise<{ success:
     };
   } catch (error: any) {
     console.error('SMTP connection test failed:', error);
-    
+
     let message = 'SMTP connection failed: ';
     if (error.code === 'EAUTH') {
       message += 'Authentication failed. Check your username and password.';
