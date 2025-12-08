@@ -3,6 +3,9 @@ import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
+// Force dynamic rendering - this API route uses cookies/session
+export const dynamic = 'force-dynamic';
+
 // GET endpoint to fetch current user profile data
 export async function GET() {
   try {
