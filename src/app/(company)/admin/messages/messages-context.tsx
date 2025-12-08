@@ -3,6 +3,7 @@
 import { getMessageBadgeCounts, getMessagesAction, updateMessageStatus, updateMultipleMessageStatus } from '@/app/actions/message-actions';
 import { Message, MessageType } from '@/components/messages/types';
 import { ActionResponse, MessageCounts } from '@/lib/definitions';
+import { parseDateParam, serializeDateParam, useURLSync } from '@/lib/url-sync';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useDebounce } from 'use-debounce';
@@ -36,6 +37,8 @@ const calculateTotal = (counts: MessageCounts) => {
 export type MessageStatusFilter = 'ALL' | 'UNREAD' | 'READ' | 'ARCHIVED' | 'TRASH' | 'DRAFTS';
 
 export function MessagesProvider({ children, initialMessages, initialStatusFilter }: { children: ReactNode; initialMessages?: Message[]; initialStatusFilter?: MessageStatusFilter }) {
+  const { updateURL, getParam } = useURLSync();
+  
   const [messages, setMessages] = useState<Message[]>(initialMessages || []);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -50,13 +53,14 @@ export function MessagesProvider({ children, initialMessages, initialStatusFilte
     drafts: 0,
   });
 
-  const [searchQuery, setSearchQuery] = useState('');
+  // Initialize state from URL parameters
+  const [searchQuery, setSearchQuery] = useState(getParam('search', ''));
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-  const [sortBy, setSortBy] = useState('createdAt_desc');
+  const [sortBy, setSortBy] = useState(getParam('sort', 'createdAt_desc'));
   const [statusFilter, setStatusFilter] = useState<MessageStatusFilter>(initialStatusFilter || 'ALL');
   const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined}>({
-    from: undefined,
-    to: undefined,
+    from: parseDateParam(getParam('dateFrom', '')),
+    to: parseDateParam(getParam('dateTo', '')),
   });
 
   const fetchMessages = useCallback(async (pageNum: number, shouldRefresh: boolean) => {
@@ -99,6 +103,17 @@ export function MessagesProvider({ children, initialMessages, initialStatusFilte
       setIsLoading(false);
     }
   }, [statusFilter, sortBy, debouncedSearchQuery, dateRange.from, dateRange.to]);
+
+  // Sync URL when filter state changes
+  useEffect(() => {
+    updateURL({
+      search: searchQuery,
+      sort: sortBy,
+      dateFrom: serializeDateParam(dateRange.from),
+      dateTo: serializeDateParam(dateRange.to),
+      // Note: statusFilter handled by route (inbox, sent, drafts, etc.)
+    });
+  }, [searchQuery, sortBy, dateRange.from, dateRange.to, updateURL]);
 
   useEffect(() => {
     setPage(1);

@@ -114,9 +114,10 @@ export function AdminHeader({ session, lightLogoUrl, darkLogoUrl }: AdminHeaderP
                   )}
                 </Link>
               ))}
-              <div className="border-t border-border/50 pt-4 mt-4">
+              <div className="pt-2 mt-2 border-t border-border/50">
                 <LogoutButton
-                  className="w-full justify-start text-destructive hover:text-destructive/80"
+                  variant="destructive"
+                  className="w-full"
                   isCollapsed={false}
                 />
               </div>

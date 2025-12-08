@@ -3,11 +3,11 @@ import { saveDraft } from '@/app/actions/message-advanced-actions';
 import { ReplyTemplateSelector } from '@/components/quotes/ReplyTemplateSelector';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -153,27 +153,25 @@ export function ComposeDialog({ open, onOpenChange }: { open: boolean, onOpenCha
               )}
             </div>
 
-            <DialogFooter className="flex justify-between sm:justify-between items-center w-full sticky bottom-0 bg-background border-t md:static md:border-0 p-4 sm:p-6 mt-0 -mx-6 -mb-6">
-              <div className="flex gap-2">
-                 <Tooltip>
-                   <TooltipTrigger asChild>
-                     <Button 
-                       type="button" 
-                       variant="outline" 
-                       size="sm" 
-                       className="gap-2 h-11 md:h-9" 
-                       onClick={handleSaveDraft}
-                       disabled={isSavingDraft}
-                     >
-                         <Save className="h-4 w-4" />
-                         <span>{isSavingDraft ? 'Saving...' : 'Save Draft'}</span>
-                     </Button>
-                   </TooltipTrigger>
-                   <TooltipContent>
-                     <p>Save message as draft to send later</p>
-                   </TooltipContent>
-                 </Tooltip>
-              </div>
+            <DialogFooter className="flex flex-row justify-between gap-2 sticky bottom-0 bg-background border-t md:static md:border-0 p-4 sm:p-6 mt-0 -mx-6 -mb-6">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm" 
+                    className="gap-2 h-11 md:h-9" 
+                    onClick={handleSaveDraft}
+                    disabled={isSavingDraft}
+                  >
+                      <Save className="h-4 w-4" />
+                      <span>{isSavingDraft ? 'Saving...' : 'Save Draft'}</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Save message as draft to send later</p>
+                </TooltipContent>
+              </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button type="submit" disabled={isLoading} className="h-11 md:h-9 px-6 md:px-4">

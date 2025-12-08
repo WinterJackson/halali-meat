@@ -3,6 +3,7 @@
 import { getQuotesAction, updateMultipleQuoteStatus, updateQuoteStatus } from '@/app/actions/quote-actions';
 import { Quote } from '@/components/quotes/types';
 import { QuoteCounts } from '@/lib/definitions';
+import { parseDateParam, serializeDateParam, useURLSync } from '@/lib/url-sync';
 import { QuoteStatus } from '@prisma/client';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -34,6 +35,8 @@ const QuotesContext = createContext<QuotesContextType | undefined>(undefined);
 export type QuoteStatusFilter = 'ALL' | 'UNREAD' | 'READ' | 'PENDING' | 'PROCESSED' | 'RESPONDED' | 'ARCHIVED' | 'TRASH';
 
 export function QuotesProvider({ children, initialStatusFilter }: { children: ReactNode; initialStatusFilter?: QuoteStatusFilter }) {
+  const { updateURL, getParam } = useURLSync();
+  
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -49,13 +52,14 @@ export function QuotesProvider({ children, initialStatusFilter }: { children: Re
     trash: 0,
   });
 
-  const [searchQuery, setSearchQuery] = useState('');
+  // Initialize state from URL parameters
+  const [searchQuery, setSearchQuery] = useState(getParam('search', ''));
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-  const [sortBy, setSortBy] = useState('createdAt_desc');
+  const [sortBy, setSortBy] = useState(getParam('sort', 'createdAt_desc'));
   const [statusFilter, setStatusFilter] = useState<QuoteStatusFilter>(initialStatusFilter || 'ALL');
   const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
-    from: undefined,
-    to: undefined,
+    from: parseDateParam(getParam('dateFrom', '')),
+    to: parseDateParam(getParam('dateTo', '')),
   });
 
   const fetchQuotesAndCounts = useCallback(async (pageNum: number, shouldRefresh: boolean) => {
@@ -88,6 +92,17 @@ export function QuotesProvider({ children, initialStatusFilter }: { children: Re
       setIsLoading(false);
     }
   }, [statusFilter, sortBy, debouncedSearchQuery, dateRange.from, dateRange.to]);
+
+  // Sync URL when filter state changes
+  useEffect(() => {
+    updateURL({
+      search: searchQuery,
+      sort: sortBy,
+      dateFrom: serializeDateParam(dateRange.from),
+      dateTo: serializeDateParam(dateRange.to),
+      // Note: statusFilter handled by route (pending, responded, etc.)
+    });
+  }, [searchQuery, sortBy, dateRange.from, dateRange.to, updateURL]);
 
   useEffect(() => {
     setPage(1);

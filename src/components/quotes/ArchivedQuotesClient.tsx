@@ -2,18 +2,26 @@
 
 import { updateQuoteStatus } from '@/app/actions/quote-actions';
 import { QuoteView } from '@/components/quotes/QuoteView';
+import { useURLSync } from '@/lib/url-sync';
 import { cn } from '@/lib/utils';
 import { Archive } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { QuoteList } from './QuoteList';
 import { Quote } from './types';
 
 export function ArchivedQuotesClient({ initialQuotes }: { initialQuotes: Quote[] }) {
+  const { updateURL, getParam } = useURLSync();
+  
   const [quotes, setQuotes] = useState<Quote[]>(initialQuotes);
   const [selectedQuoteId, setSelectedQuoteId] = useState<string | null>(null);
   const selectedQuote = useMemo(() => quotes.find(q => q.id === selectedQuoteId) || null, [quotes, selectedQuoteId]);
-  const [searchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(getParam('search', ''));
+
+  // Sync URL when search changes
+  useEffect(() => {
+    updateURL({ search: searchQuery });
+  }, [searchQuery, updateURL]);
 
   const handleAction = async (action: string, id: string) => {
     if (action === 'unarchive') {

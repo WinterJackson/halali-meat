@@ -2,6 +2,7 @@
 
 import { getProductsAction } from '@/app/actions/product-actions';
 import { Product } from '@/components/products/types';
+import { useURLSync } from '@/lib/url-sync';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useDebounce } from 'use-debounce';
@@ -52,16 +53,25 @@ export function ProductFilterProvider({
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (product: Product) => void;
 }) {
+  const { updateURL, getParam } = useURLSync();
+  
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  // Initialize state from URL parameters
+  const [searchQuery, setSearchQuery] = useState(getParam('search', ''));
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('createdAt_desc');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    const category = getParam('category', '');
+    return category ? [category] : [];
+  });
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(() => {
+    const type = getParam('type', '');
+    return type ? [type] : [];
+  });
+  const [sortBy, setSortBy] = useState(getParam('sort', 'createdAt_desc'));
 
   const fetchProducts = useCallback(async (pageNum: number, shouldRefresh: boolean) => {
     setIsLoading(true);
@@ -107,6 +117,16 @@ export function ProductFilterProvider({
     setHasMore(true);
     fetchProducts(1, true);
   }, [debouncedSearchQuery, sortBy, selectedCategories, selectedTypes, fetchProducts]);
+
+  // Sync URL when filter state changes
+  useEffect(() => {
+    updateURL({
+      search: searchQuery,
+      sort: sortBy,
+      category: selectedCategories.length > 0 ? selectedCategories[0] : '',
+      type: selectedTypes.length > 0 ? selectedTypes[0] : '',
+    });
+  }, [searchQuery, sortBy, selectedCategories, selectedTypes, updateURL]);
 
   const loadMore = () => {
     if (!isLoading && hasMore) {

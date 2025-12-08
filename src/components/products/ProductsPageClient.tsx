@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { useURLSync } from '@/lib/url-sync';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Calendar,
@@ -139,10 +140,13 @@ function ShareProduct({ product, isOpen, onClose }: { product: Product; isOpen: 
 }
 
 export const ProductsPageClient = memo(function ProductsPageClient({ products }: { products: Product[] }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState('ALL');
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [sortBy, setSortBy] = useState('newest');
+  const { updateURL, getParam } = useURLSync();
+  
+  // Initialize state from URL parameters
+  const [searchQuery, setSearchQuery] = useState(getParam('search', ''));
+  const [selectedType, setSelectedType] = useState(getParam('type', 'ALL'));
+  const [selectedCategory, setSelectedCategory] = useState(getParam('category', 'ALL'));
+  const [sortBy, setSortBy] = useState(getParam('sort', 'newest'));
   const [showFilters, setShowFilters] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -151,6 +155,16 @@ export const ProductsPageClient = memo(function ProductsPageClient({ products }:
   const [shareProduct, setShareProduct] = useState<Product | null>(null);
   const [infiniteScrollEnabled, setInfiniteScrollEnabled] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Sync URL when filter state changes
+  useEffect(() => {
+    updateURL({
+      search: searchQuery,
+      type: selectedType,
+      category: selectedCategory,
+      sort: sortBy,
+    });
+  }, [searchQuery, selectedType, selectedCategory, sortBy, updateURL]);
 
   // Check if product is new (created in last 7 days)
   const isNewProduct = useCallback((product: Product) => {

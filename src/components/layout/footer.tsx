@@ -19,19 +19,12 @@ export default function Footer({ lightLogoUrl, darkLogoUrl }: FooterProps = {}) 
 
   const footerLinks = [
     {
-      title: "Company",
-      links: [
-        { href: "/about", label: "About Us" },
-        { href: "/services", label: "Services" },
-        { href: "/halal-standards", label: "Halal Standards" },
-      ],
-    },
-    {
       title: "Products",
       links: [
-        { href: "/products?category=beef", label: "Beef" },
-        { href: "/products?category=lamb", label: "Lamb & Mutton" },
-        { href: "/products?category=goat", label: "Goat" },
+        { href: "/products?search=beef", label: "Beef" },
+        { href: "/products?search=lamb", label: "Lamb" },
+        { href: "/products?search=mutton", label: "Mutton" },
+        { href: "/products?search=goat", label: "Goat" },
       ],
     },
     {
@@ -39,7 +32,17 @@ export default function Footer({ lightLogoUrl, darkLogoUrl }: FooterProps = {}) 
       links: [
         { href: "/contact", label: "Contact Us" },
         { href: "/get-a-quote", label: "Get a Quote" },
+        { href: "/faq", label: "FAQ" },
+      ],
+    },
+    {
+      title: "Legal",
+      links: [
         { href: "/privacy-policy", label: "Privacy Policy" },
+        { href: "/terms", label: "Terms & Conditions" },
+        { href: "/shipping", label: "Shipping Policy" },
+        { href: "/returns", label: "Returns & Refunds" },
+        { href: "/disclaimer", label: "Disclaimer" },
       ],
     },
   ];
@@ -86,7 +89,7 @@ export default function Footer({ lightLogoUrl, darkLogoUrl }: FooterProps = {}) 
         </div>
 
         <div className="mt-12 border-t border-border p-4 flex flex-col sm:flex-row justify-between items-center text-xs text-muted-foreground text-center sm:text-left">
-          <p>&copy; {new Date().getFullYear()} Halali Meat Ltd. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Halali Meat Ltd. All rights reserved. | <a href="/sitemap" className="hover:text-foreground transition-colors">Sitemap</a></p>
           <p className="mt-2 sm:mt-0">
             Designed & Developed by | {" "}
             <a href="https://winterjackson.github.io" target="_blank" rel="noopener noreferrer" className="text-primary hover:bg-primary hover:text-primary-foreground p-2 rounded-[5px] transition-colors duration-300 font-bold hover:scale-105 hover:-translate-y-1">
